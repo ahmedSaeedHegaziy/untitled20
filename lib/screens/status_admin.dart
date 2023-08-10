@@ -12,7 +12,7 @@ final userRoleStateFuture = FutureProvider.autoDispose<String>((ref) async {
   String role = await getUserRole();
   return role;
 });
-Status status = Status(id: 1, name: 'Inbox', color: '0xfffa3a57');
+Status status = Status(id: 1 , name: 'Inbox', color: '0xfffa3a57');
 
 
 

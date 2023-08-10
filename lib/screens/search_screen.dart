@@ -4,18 +4,18 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:untitled20/services/mail_services.dart';
-import 'package:untitled20/widgets/myAppBarEmpty.dart';
 
 import '../../utils/constant.dart';
+
 import '../models_localhost/api_response.dart';
 import '../models_localhost/status.dart';
 import '../services/search_services.dart';
 import '../services/user_service.dart';
 import '../state/state_manager.dart';
 import '../widgets/mailWidget.dart';
+import '../widgets/myAppBarEmpty.dart';
 import 'filters_selector.dart';
-import 'login_.dart';
+import 'login.dart';
 
 class MySearch extends StatefulWidget {
   const MySearch({
@@ -46,18 +46,16 @@ class _MySearchState extends State<MySearch> {
     if (response.error == null) {
       setState(() {
         mails = response.data as List<dynamic>;
-        getMails();
         loading = false;
-
       });
       return;
     }
     if (response.error == unauthorized) {
       logout().then((value) => {
-            Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (context) => const LoginScreen()),
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => const Login()),
                 (route) => false)
-          });
+      });
     }
     if (!mounted) return;
     showMessage(context, '${response.error}');
@@ -75,15 +73,15 @@ class _MySearchState extends State<MySearch> {
       builder: (context) =>
           FiltersSelector(status: status, startDate: start, endDate: end),
     ).then((value) => setState(() {
-          ref.read(hoverStateFuture.state).state = false;
-          status = value['status'];
-          start = value['start'];
-          end = value['end'];
-          if (status != null || start != null || end != null) {
-            loading = true;
-            _search();
-          }
-        }));
+      ref.read(hoverStateFuture.state).state = false;
+      status = value['status'];
+      start = value['start'];
+      end = value['end'];
+      if (status != null || start != null || end != null) {
+        loading = true;
+        _search();
+      }
+    }));
   }
 
   @override
@@ -134,21 +132,21 @@ class _MySearchState extends State<MySearch> {
                 _searchCnt.text.isEmpty
                     ? Container()
                     : SingleChildScrollView(
-                        controller: _controller,
-                        child: !loading
-                            ? SearchResult(
-                                heightFirstW: appBarHeight + 34,
-                                mails: mails,
-                              )
-                            : const Center(
-                                child: Padding(
-                                  padding: EdgeInsets.only(top: 180.0),
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                  ),
-                                ),
-                              ),
+                  controller: _controller,
+                  child: !loading
+                      ? SearchResult(
+                    heightFirstW: appBarHeight + 34,
+                    mails: mails,
+                  )
+                      : const Center(
+                    child: Padding(
+                      padding: EdgeInsets.only(top: 180.0),
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
                       ),
+                    ),
+                  ),
+                ),
                 MyAppBarEmpty(
                   controller: _controller,
                   appBarHeight: appBarHeight,
@@ -204,7 +202,7 @@ class _MySearchState extends State<MySearch> {
                                 focusNode: _focus,
                                 decoration: InputDecoration(
                                   contentPadding:
-                                      const EdgeInsets.symmetric(vertical: 8),
+                                  const EdgeInsets.symmetric(vertical: 8),
                                   hintText: 'Search'.tr(),
                                   prefixIcon: Icon(
                                     Icons.search,
@@ -212,32 +210,32 @@ class _MySearchState extends State<MySearch> {
                                   ),
                                   suffixIcon: _focus.hasFocus
                                       ? IconButton(
-                                          icon: Icon(
-                                            Icons.cancel,
-                                            color: _searchCnt.text.isEmpty
-                                                ? kGray50
-                                                : kSecondaryColor,
-                                          ),
-                                          onPressed: () {
-                                            setState(() {
-                                              _searchCnt.clear();
-                                            });
-                                          },
-                                        )
+                                    icon: Icon(
+                                      Icons.cancel,
+                                      color: _searchCnt.text.isEmpty
+                                          ? kGray50
+                                          : kSecondaryColor,
+                                    ),
+                                    onPressed: () {
+                                      setState(() {
+                                        _searchCnt.clear();
+                                      });
+                                    },
+                                  )
                                       : null,
                                   focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(30.0),
                                     borderSide:
-                                        BorderSide(color: kGray10, width: 0),
+                                    BorderSide(color: kGray10, width: 0),
                                   ),
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(30.0),
                                     borderSide:
-                                        BorderSide(color: kGray10, width: 1),
+                                    BorderSide(color: kGray10, width: 1),
                                   ),
                                   filled: true,
                                   fillColor:
-                                      !_focus.hasFocus ? kWhite : kGray10,
+                                  !_focus.hasFocus ? kWhite : kGray10,
                                   // focusColor: gray10,
                                 ),
                               ),
@@ -270,7 +268,6 @@ class _MySearchState extends State<MySearch> {
 class SearchResult extends StatelessWidget {
   final double heightFirstW;
   final List<dynamic> mails;
-
   const SearchResult(
       {Key? key, required this.heightFirstW, required this.mails})
       : super(key: key);
@@ -285,14 +282,14 @@ class SearchResult extends StatelessWidget {
         const Divider(),
         mails.isNotEmpty
             ? ListView.builder(
-                reverse: true,
-                primary: false,
-                shrinkWrap: true,
-                itemCount: mails.length,
-                itemBuilder: (context, index) {
-                  return MailWidget(mail: mails[index]);
-                },
-              )
+          reverse: true,
+          primary: false,
+          shrinkWrap: true,
+          itemCount: mails.length,
+          itemBuilder: (context, index) {
+            return MailWidget(mail: mails[index]);
+          },
+        )
             : Center(child: Text('There is no mails'.tr()))
       ],
     );

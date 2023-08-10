@@ -90,6 +90,7 @@ class Mail {
   String? finalDecision;
   DateTime? createdAt;
   DateTime? updatedAt;
+  Sender? senderId;
   Sender? sender;
   Status? status;
   List<Tag?>? tags;

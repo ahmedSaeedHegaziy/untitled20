@@ -215,21 +215,6 @@ class _AllSendersState extends State<AllSenders> {
                                 element.name,
                                 style: TextStyle(color: kBlack),
                               ),
-                              subtitle: Row(
-                                children: [
-                                  const Icon(
-                                    Icons.phone,
-                                    size: 12,
-                                  ),
-                                  const SizedBox(
-                                    width: 8,
-                                  ),
-                                  Text(
-                                    element.mobile ?? '',
-                                    style: TextStyle(color: kGray70),
-                                  ),
-                                ],
-                              ),
                               // shape: Border(
                               //     bottom: BorderSide(
                               //         color: kGray70, width: 0.2)),

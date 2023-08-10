@@ -1,10 +1,12 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:untitled20/screens/home.dart';
 
 import 'package:untitled20/widgets/buttons.dart';
 
@@ -67,10 +69,10 @@ class _ProfileState extends State<Profile> {
       });
     } else if (response.error == unauthorized) {
       logout().then((value) => {
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => Login()),
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (context) => Login()),
                 (route) => false)
-      });
+          });
     } else {
       if (!mounted) return;
       showMessage(context, '${response.error}');
@@ -88,10 +90,10 @@ class _ProfileState extends State<Profile> {
       showMessage(context, '${response.data}');
     } else if (response.error == unauthorized) {
       logout().then((value) => {
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => Login()),
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (context) => Login()),
                 (route) => false)
-      });
+          });
     } else {
       if (!mounted) return;
       showMessage(context, '${response.error}');
@@ -106,6 +108,8 @@ class _ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
+    String imageUrl = "$storageUrl/${user?.image}"; // Replace with your image URL
+
     return Scaffold(
       body: loading
           ? Center(
@@ -131,6 +135,7 @@ class _ProfileState extends State<Profile> {
               children: [
                 Center(
                   child: GestureDetector(
+                    onTap: getImage,
                     child: Container(
                       width: 110,
                       height: 110,
@@ -144,7 +149,7 @@ class _ProfileState extends State<Profile> {
                             : user!.image != ''
                             ? DecorationImage(
                           image: CachedNetworkImageProvider(
-                            '$storageUrl/${user!.image}',
+                            imageUrl, // Use the imageUrl directly
                           ),
                           fit: BoxFit.cover,
                         )
@@ -157,7 +162,6 @@ class _ProfileState extends State<Profile> {
                         color: Colors.amber,
                       ),
                     ),
-                    onTap: getImage,
                   ),
                 ),
                 SizedBox(height: 20),
@@ -165,7 +169,6 @@ class _ProfileState extends State<Profile> {
                   key: formKey,
                   child: Column(
                     children: [
-                      Text("$storageUrl/${user!.image}"),
                       TextFormField(
                         decoration: kInputDecoration('Name'),
                         controller: txtNameController,
@@ -217,13 +220,18 @@ class _ProfileState extends State<Profile> {
             leading: IconButton(
               padding: const EdgeInsets.all(16),
               alignment: Alignment.centerLeft,
+
               icon: Icon(
                 Icons.arrow_back_ios_outlined,
                 color: kBlack,
               ),
               onPressed: () {
-                Navigator.of(context).pop();
-              },
+                Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(
+                    builder: (context) => Home(),
+                  ),
+                      (route) => false,
+                );              },
             ),
           ),
         ],

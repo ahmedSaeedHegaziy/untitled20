@@ -13,6 +13,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:untitled20/models_localhost/user.dart';
 import 'package:untitled20/screens/all_senders.dart';
+import 'package:untitled20/screens/all_users.dart';
 import 'package:untitled20/screens/manage_users.dart';
 import 'package:untitled20/screens/new_inbox.dart';
 import 'package:untitled20/screens/new_inbox_editor.dart';
@@ -30,21 +31,21 @@ import 'package:untitled20/services/mail_services.dart';
 import 'package:untitled20/services/user_service.dart';
 
 import 'package:untitled20/widgets/myAppBar.dart';
-import 'package:untitled20/widgets/myGridView.dart';
 import 'package:untitled20/widgets/myGroupList_Inprogress.dart';
 
 import '../models_localhost/activity.dart';
 import '../models_localhost/api_response.dart';
 import '../models_localhost/mail.dart';
 
-import '../models_localhost/sender.dart';
-import '../models_localhost/status.dart';
-import '../services/ac.dart';
+
 import '../state/state_manager.dart';
 import '../utils/constant.dart';
 
+import '../widgets/mailWidget.dart';
+import '../widgets/myExpansionTile.dart';
+import '../widgets/myGridView.dart';
 import '../widgets/myGridViewAdmin.dart';
-import '../widgets/myGroupList.dart';
+
 import '../widgets/myGroupList_Completed.dart';
 import '../widgets/myGroupList_inbox.dart';
 import '../widgets/my_pop_menu.dart';
@@ -58,14 +59,6 @@ class Home extends ConsumerWidget {
   final GlobalKey<ScaffoldState> _key = GlobalKey();
   final _advancedDrawerController = AdvancedDrawerController();
 
-  Activity activity = Activity(
-    body: 'Sample body',
-    userId: 123,
-    mailId: 456,
-    sendNumber: 'Sample send number',
-    sendDate: DateTime.now(),
-    sendDestination: 'Sample send destination',
-  );
 
   Home({Key? key}) : super(key: key);
 
@@ -104,11 +97,12 @@ class Home extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var mails = <Mail>[];
-    final double heightFirstW;
-    final List<dynamic> tags;
+
+
     final isHover = ref.watch(hoverStateFuture);
     final userRoleFuture = ref.watch(userRoleStateFuture);
+
+
     return AdvancedDrawer(
       backdropColor: kPrimaryColor,
       controller: _advancedDrawerController,
@@ -409,29 +403,62 @@ class Home extends ConsumerWidget {
   }
 }
 
-class HomeScreenWidgets extends StatelessWidget {
+// بقية الاستيرادات
+
+class HomeScreenWidgets extends StatefulWidget {
   final List<dynamic> mails;
   final List<dynamic> statuses;
 
-  const HomeScreenWidgets(
-      {Key? key, required this.mails, required this.statuses})
-      : super(key: key);
+  const HomeScreenWidgets({
+    Key? key,
+    required this.mails,
+    required this.statuses,
+  }) : super(key: key);
+
+  @override
+  State<HomeScreenWidgets> createState() => _HomeScreenWidgetsState();
+}
+
+class _HomeScreenWidgetsState extends State<HomeScreenWidgets> {
+  int count = 0;
+
+  var tags = <dynamic>[];
+  late Future<List<dynamic>> _mailsFuture;
+  final List<dynamic> mails = [];
+  final List<dynamic> categories = [];
+
+
+
+  final MyGroupListInbox _myGroupListInbox = MyGroupListInbox(
+    mails: [], // Add your initial list of mails here
+    categories: [], // Add your initial list of categories here
+  );
+
+  @override
+
+  void initState() {
+    super.initState();
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    // // الاستدعاء هنا بالشكل الصحيح
+    // });
+  }
+
+
+
+
+
+
 
   @override
   Widget build(BuildContext context) {
-    var tags = <dynamic>[];
-    late Future<List<dynamic>> _mailsFuture;
 
-    _mailsFuture = fetchMails() as Future<List>;
     return Column(
       children: [
-        //this sizedBox needed to shit the widget away from under appBar
         const SizedBox(
           height: 80,
         ),
         //status
-//inbox
-
+        //inbox
 
 
         Consumer(
@@ -458,11 +485,13 @@ class HomeScreenWidgets extends StatelessWidget {
                   },
                 );
               } else {
+                final futureStatuses = ref.watch(statusesStateFuture);
+
                 return futureStatuses.when(
                   data: (statuses) => Column(
                     children: [
                       Container(
-                        height: 120,
+                        height: 110,
                         width: 360,
                         child: Material(
                           elevation: 5,
@@ -473,8 +502,7 @@ class HomeScreenWidgets extends StatelessWidget {
                             borderRadius: BorderRadius.circular(30),
                             onTap: () {
                               Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => StatusMailsInbox(
-                                ),
+                                builder: (context) => StatusMailsInbox(),
                               ));
                             },
                             child: Padding(
@@ -488,8 +516,7 @@ class HomeScreenWidgets extends StatelessWidget {
                                     children: [
                                       Icon(
                                         Icons.circle,
-                                        color:
-                                        Colors.red,
+                                        color: Colors.red,
                                       ),
                                       Text(
                                         "${allInbox.length}",
@@ -517,9 +544,8 @@ class HomeScreenWidgets extends StatelessWidget {
                       ),
                       SizedBox(height: 20),
                       //inprogrees
-
                       Container(
-                        height: 120,
+                        height: 110,
                         width: 360,
                         child: Material(
                           elevation: 5,
@@ -530,8 +556,7 @@ class HomeScreenWidgets extends StatelessWidget {
                             borderRadius: BorderRadius.circular(30),
                             onTap: () {
                               Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => StatusMailsInprogress(
-                                ),
+                                builder: (context) => StatusMailsInprogress(),
                               ));
                             },
                             child: Padding(
@@ -545,8 +570,7 @@ class HomeScreenWidgets extends StatelessWidget {
                                     children: [
                                       Icon(
                                         Icons.circle,
-                                        color:
-                                        Colors.blueAccent,
+                                        color: Colors.blueAccent,
                                       ),
                                       Text(
                                         "${allInprogress.length}",
@@ -575,7 +599,7 @@ class HomeScreenWidgets extends StatelessWidget {
                       SizedBox(height: 20),
                       //completed
                       Container(
-                        height: 120,
+                        height: 110,
                         width: 360,
                         child: Material(
                           elevation: 5,
@@ -586,8 +610,7 @@ class HomeScreenWidgets extends StatelessWidget {
                             borderRadius: BorderRadius.circular(30),
                             onTap: () {
                               Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => StatusMailsCompleted(
-                                ),
+                                builder: (context) => StatusMailsCompleted(),
                               ));
                             },
                             child: Padding(
@@ -601,8 +624,7 @@ class HomeScreenWidgets extends StatelessWidget {
                                     children: [
                                       Icon(
                                         Icons.circle,
-                                        color:
-                                        Colors.green,
+                                        color: Colors.green,
                                       ),
                                       Text(
                                         "${allCompleted.length}",
@@ -628,6 +650,10 @@ class HomeScreenWidgets extends StatelessWidget {
                           ),
                         ),
                       ),
+                      //
+
+                      SizedBox(height: 57),
+
                     ],
                   ),
                   loading: () {
@@ -660,13 +686,7 @@ class HomeScreenWidgets extends StatelessWidget {
             });
           },
         ),
-        // Consumer(builder: (BuildContext context, WidgetRef ref, Widget? child) {
-        //   final futureStatuses = ref.watch(statusesStateFuture);
-        //
-        // }),
 
-        // StatusContainer(status: {},),
-        SizedBox(height: 50),
         Consumer(
           builder: (BuildContext context, WidgetRef ref, Widget? child) {
             final futureTags = ref.watch(tagsStateFuture);
@@ -675,71 +695,71 @@ class HomeScreenWidgets extends StatelessWidget {
               data: (tags) {
                 return tags.isNotEmpty
                     ? Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 16),
-                        width: MediaQuery.of(context).size.width,
-                        margin: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 6),
-                        decoration: BoxDecoration(
-                            color: kWhite,
-                            borderRadius: BorderRadius.circular(30)),
-                        child: Builder(
-                          builder: (context) {
-                            List<Widget> temp = [];
-                            for (int i = 0; i < tags.length; i++) {
-                              temp.add(
-                                GestureDetector(
-                                  onTap: () {
-                                    Navigator.of(context)
-                                        .push(MaterialPageRoute(
-                                            builder: (context) => SearchWithTag(
-                                                  allSelected: false,
-                                                  tags: tags,
-                                                  selectedTag: i,
-                                                )));
-                                  },
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 12, vertical: 8),
-                                    // margin: const EdgeInsets.only(top: 8),
-                                    decoration: BoxDecoration(
-                                      color: kGray10,
-                                      borderRadius: BorderRadius.circular(30),
-                                    ),
-                                    child: Text('# ${tags[i].name}'),
-                                  ),
-                                ),
-                              );
-                            }
-                            return Wrap(
-                              spacing: 8,
-                              runSpacing: 8,
-                              children: [
-                                GestureDetector(
-                                  onTap: () {
-                                    Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                            builder: (context) => SearchWithTag(
-                                                allSelected: true,
-                                                tags: tags)));
-                                  },
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 12, vertical: 8),
-                                    // margin: const EdgeInsets.only(top: 8),
-                                    decoration: BoxDecoration(
-                                      color: kGray10,
-                                      borderRadius: BorderRadius.circular(30),
-                                    ),
-                                    child: Text('All Tags'.tr()),
-                                  ),
-                                ),
-                                ...temp
-                              ],
-                            );
-                          },
-                        ),
-                      )
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 16, vertical: 16),
+                  width: MediaQuery.of(context).size.width,
+                  margin: const EdgeInsets.symmetric(
+                      horizontal: 16, vertical: 6),
+                  decoration: BoxDecoration(
+                      color: kWhite,
+                      borderRadius: BorderRadius.circular(30)),
+                  child: Builder(
+                    builder: (context) {
+                      List<Widget> temp = [];
+                      for (int i = 0; i < tags.length; i++) {
+                        temp.add(
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.of(context)
+                                  .push(MaterialPageRoute(
+                                  builder: (context) => SearchWithTag(
+                                    allSelected: false,
+                                    tags: tags,
+                                    selectedTag: i,
+                                  )));
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 8),
+                              // margin: const EdgeInsets.only(top: 8),
+                              decoration: BoxDecoration(
+                                color: kGray10,
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              child: Text('# ${tags[i].name}'),
+                            ),
+                          ),
+                        );
+                      }
+                      return Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                      builder: (context) => SearchWithTag(
+                                          allSelected: true,
+                                          tags: tags)));
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 8),
+                              // margin: const EdgeInsets.only(top: 8),
+                              decoration: BoxDecoration(
+                                color: kGray10,
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              child: Text('All Tags'.tr()),
+                            ),
+                          ),
+                          ...temp
+                        ],
+                      );
+                    },
+                  ),
+                )
                     : SizedBox();
               },
               loading: () {
@@ -757,16 +777,16 @@ class HomeScreenWidgets extends StatelessWidget {
               },
             );
           },
-        ),
-
-        //this sizedBox needed to shit the widget away from bottom appBar
-        const SizedBox(
+        ),        const SizedBox(
           height: 57,
         ),
       ],
     );
   }
+
+
 }
+
 
 ///get all mails
 Future<List<dynamic>> fetchMails() async {
@@ -793,3 +813,7 @@ Future<List<dynamic>> fetchMails() async {
   }
   return mails;
 }
+
+
+
+

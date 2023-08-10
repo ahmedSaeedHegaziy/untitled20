@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:untitled20/screens/profile.dart';
 import 'package:untitled20/services/user_service.dart';
 
 import '../models_localhost/api_response.dart';
@@ -72,10 +73,16 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          onPressed: (){
+            Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => Profile()),
+            ) ;
+          },
+          icon: Icon(Icons.arrow_back_ios_new_outlined),
+        ),
         title: Text('Change Password'),
-        actions: [
 
-        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

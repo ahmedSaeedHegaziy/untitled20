@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:untitled20/screens/all_users.dart';
 
 import '../../utils/constant.dart';
 import '../models_localhost/api_response.dart';
@@ -35,8 +36,10 @@ class _MyGroupListState extends State<MyGroupListInbox> {
     getUserData();
     super.initState();
   }
+
   Future<List<Mail>> getUserData() async {
     ApiResponse response = await getUserDetail();
+
     if (response.error == null) {
       var user = response.data as User;
       userData = user.name!; // Update the userData
@@ -45,7 +48,7 @@ class _MyGroupListState extends State<MyGroupListInbox> {
       allInbox = inbox
           .where((element) => element.subject?.contains(userData) == true)
           .toList();
-      count = allInbox.length; // Update the count value
+      count = allInbox.length;
       print("all : ${allInbox.length}");
       count = allInbox.length;
       print("count $count");

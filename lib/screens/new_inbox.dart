@@ -144,7 +144,7 @@ class _NewInboxState extends State<NewInbox> {
       });
     }
   }
-///create mail function
+  ///create mail function
 
   List<XFile?>? images = []; // Store images or attachments here.
 
@@ -261,7 +261,7 @@ class _NewInboxState extends State<NewInbox> {
   @override
   Widget build(BuildContext context) {
 
-     return Container(
+    return Container(
       decoration: BoxDecoration(
           color: kBackground, borderRadius: BorderRadius.circular(10)),
       height: MediaQuery
@@ -527,7 +527,7 @@ class _NewInboxState extends State<NewInbox> {
                         ),
                       ),
                       //status
-                    MyWidget(),
+                      MyWidget(),
                       // decision
                       Container(
                         margin: const EdgeInsets.symmetric(
@@ -588,12 +588,12 @@ class _NewInboxState extends State<NewInbox> {
                                   child: Text('Add attachment'.tr()),
                                   onPressed: () {
                                     //getFile();
-                                     getImage();
+                                    getImage();
                                     // print("addwesam attach");
                                     //      pickImages();
                                   },
                                 ),
-                                   SizedBox(width: 180,),
+                                SizedBox(width: 180,),
                                 Icon(
                                   Icons.arrow_forward_ios,
                                   size: 14,
@@ -682,7 +682,7 @@ class _NewInboxState extends State<NewInbox> {
                       //activities
 
 
-                       //sender,mobile and category
+                      //sender,mobile and category
                       Container(
                         margin: const EdgeInsets.symmetric(
                             horizontal: 16, vertical: 6),
@@ -720,24 +720,24 @@ class _NewInboxState extends State<NewInbox> {
                               height: 0,
                             ),
 
-                        ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: addusers.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            int key = addusers.keys.elementAt(index);
-                            return new Column(
-                              children: <Widget>[
-                                new ListTile(
-                                  title:  Text("${addusers[key].name}"),
-                                  subtitle: new Text("${addusers[key].mobile.toString()}"),
-                                ),
-                                new Divider(
-                                  height: 2.0,
-                                ),
-                              ],
-                            );
-                          },
-                        ),
+                            ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: addusers.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                int key = addusers.keys.elementAt(index);
+                                return new Column(
+                                  children: <Widget>[
+                                    new ListTile(
+                                      title:  Text("${addusers[key].name}"),
+                                      subtitle: new Text("${addusers[key].mobile.toString()}"),
+                                    ),
+                                    new Divider(
+                                      height: 2.0,
+                                    ),
+                                  ],
+                                );
+                              },
+                            ),
 
                             const Divider(
                               indent: 16,
@@ -975,7 +975,7 @@ class _NewInboxState extends State<NewInbox> {
                     showSnackBar(context);
                   }, child: Text("Done".tr() ,
                     style: TextStyle(
-                      fontSize: 16, fontWeight: FontWeight.w500),
+                        fontSize: 16, fontWeight: FontWeight.w500),
                   )),
                 ],
               ),
@@ -993,6 +993,3 @@ class _NewInboxState extends State<NewInbox> {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }
-
-
-

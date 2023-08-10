@@ -2,13 +2,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:untitled20/models_localhost/mail.dart';
-import 'package:untitled20/widgets/myAppBar.dart';
-import 'package:untitled20/widgets/myGroupList.dart';
 
+
+import '../models_localhost/mail.dart';
 import '../models_localhost/sender.dart';
 import '../state/state_manager.dart';
 import '../utils/constant.dart';
+import '../widgets/myAppBar.dart';
+import '../widgets/myGroupList.dart';
+import '../widgets/we.dart';
 
 class SenderMails extends ConsumerWidget {
   final _controller = ScrollController();
@@ -118,7 +120,7 @@ class HomeScreenWidgets extends StatelessWidget {
           builder: (BuildContext context, WidgetRef ref, Widget? child) {
             final futureCategories = ref.watch(categoriesStateFuture);
             return futureCategories.when(
-              data: (categories) => MyGroupList(
+              data: (categories) => MyGroupListW(
                 mails: mails!,
                 categories: categories,
                 showCompleted: true,

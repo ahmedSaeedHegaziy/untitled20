@@ -11,8 +11,8 @@ import '../services/user_service.dart';
 import '../utils/debouncer.dart';
 import '../widgets/buttons.dart';
 import '../widgets/myAppBarEmpty.dart';
-import '../widgets/update_user.dart';
 import 'login.dart';
+
  Map<dynamic , dynamic> addusers = {};
 
 class AllUsers extends StatefulWidget {
@@ -65,12 +65,13 @@ class _ManageUsersState extends State<AllUsers> {
 
   _onClickUser(User user) {
     setState(() {
-      if (addusers.containsKey(user.id)) {
+      if (addusers.containsKey(user.id))  {
         addusers.remove(user.id);
+
       } else {
         addusers[user.id] = user;
       }
-      print(addusers);
+      print("add users: $addusers") ;
     });
 
     }
@@ -137,7 +138,7 @@ class _ManageUsersState extends State<AllUsers> {
                   return Material(
                     color: kBackground,
                     child: ListTile(
-                      
+
                       enabled: true,
                       onTap: () {
 

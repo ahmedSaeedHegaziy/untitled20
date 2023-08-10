@@ -5,11 +5,11 @@ import '../../utils/constant.dart';
 import 'mailWidget.dart';
 import 'myExpansionTile.dart';
 
-class MyGroupListmails extends StatefulWidget {
+class MyGroupListMails extends StatefulWidget {
   final List<dynamic> mails;
   final bool showCompleted;
 
-  const MyGroupListmails(
+  const MyGroupListMails(
       {Key? key,
       required this.mails,
       // required this.categories,
@@ -17,10 +17,10 @@ class MyGroupListmails extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<MyGroupListmails> createState() => _MyGroupListState();
+  State<MyGroupListMails> createState() => _MyGroupListState();
 }
 
-class _MyGroupListState extends State<MyGroupListmails> {
+class _MyGroupListState extends State<MyGroupListMails> {
   @override
   void initState() {
     super.initState();

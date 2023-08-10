@@ -3,9 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../screens/login_.dart';
-import '../screens/profile.dart';
 import '../screens/show_profile.dart';
 import '../services/user_service.dart';
 import '../state/state_manager.dart';
@@ -66,7 +64,7 @@ class MyPopMenu extends StatelessWidget {
                             : const CircleAvatar(
                           radius: kSize48, // تغيير حجم الصورة في PopupMenuItem
                           backgroundImage:
-                          AssetImage('assets/image/avatar@3x.png'),
+                          AssetImage('assets/image/avatar.png'),
                         ),
                         SizedBox(
                           height: kSize8,
